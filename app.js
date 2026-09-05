@@ -228,6 +228,7 @@
         headers: { "x-access-code": state.code },
       });
       const b = data.book;
+      state.currentBook = b;
       $("#bm-cover").src = b.cover_url ? API + b.cover_url : "";
       $("#bm-cover").alt = "Couverture de " + b.title;
       $("#bm-title").textContent = b.title;
@@ -243,11 +244,54 @@
       const dl = $("#bm-download");
       if (b.download_url) { dl.href = API + b.download_url; dl.hidden = false; }
       else { dl.hidden = true; }
+      $("#bm-edit-btn").hidden = state.role !== "admin";
       openModal("book-modal");
     } catch (err) {
       alert("Impossible d'ouvrir ce livre : " + err.message);
     }
   }
+
+  // ---------- admin: edit an existing book's info ----------
+  $("#bm-edit-btn").addEventListener("click", () => {
+    const b = state.currentBook;
+    if (!b) return;
+    const form = $("#edit-book-form");
+    form.book_id.value = b.id;
+    form.title.value = b.title || "";
+    form.author.value = b.author || "";
+    form.genre.value = b.genre || "";
+    form.release_date.value = b.release_date || "";
+    form.tags.value = (b.tags || []).join(", ");
+    form.summary.value = b.summary || "";
+    form.extract.value = b.extract || "";
+    form.cover.value = "";
+    form.ebook.value = "";
+    $("#edit-book-status").textContent = "";
+    closeModal("book-modal");
+    openModal("edit-book-modal");
+  });
+
+  $("#edit-book-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const status = $("#edit-book-status");
+    const id = form.book_id.value;
+    status.textContent = "Enregistrement…";
+    try {
+      const res = await fetch(API + "/api/admin/edit-book/" + encodeURIComponent(id), {
+        method: "POST",
+        headers: { "x-access-code": state.code },
+        body: new FormData(form),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Erreur");
+      status.textContent = "Modifications enregistrées !";
+      await loadBooks();
+      setTimeout(() => closeModal("edit-book-modal"), 800);
+    } catch (err) {
+      status.textContent = "Erreur : " + err.message;
+    }
+  });
 
   // ---------- admin: add book ----------
   $("#e-add-book-btn").addEventListener("click", () => openModal("add-book-modal"));

@@ -322,31 +322,33 @@ a { color: inherit; }
   font-size: 10.5px; letter-spacing: .5px; text-transform: uppercase; padding: 4px 11px; border-radius: 20px;
 }
 
-/* Add-book form, restyled to match — this is admin tooling inside the real site */
-#add-book-modal .modal-box {
+/* Add-book / edit-book forms, restyled to match — this is admin tooling inside the real site */
+.e-book-modal-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px; align-items: center; }
+
+#add-book-modal .modal-box, #edit-book-modal .modal-box {
   background: linear-gradient(160deg, #182e22, #10201a); color: #ead9b3; border: 1px solid #d4af37;
   box-shadow: 0 0 0 1px rgba(212,175,55,.15), 0 24px 60px rgba(0,0,0,.55);
 }
-#add-book-modal h2 {
+#add-book-modal h2, #edit-book-modal h2 {
   font-family: "Cinzel Decorative", serif; color: #e9cd6f; font-size: 21px; margin-top: 0;
 }
-#add-book-modal .modal-close { color: #cdbf94; }
-#add-book-modal .modal-close:hover { color: #d4af37; }
-#add-book-form label { color: #a9c2a6; font-family: "Cinzel", serif; font-size: 11.5px; text-transform: uppercase; letter-spacing: 1px; }
-#add-book-form input, #add-book-form textarea {
+#add-book-modal .modal-close, #edit-book-modal .modal-close { color: #cdbf94; }
+#add-book-modal .modal-close:hover, #edit-book-modal .modal-close:hover { color: #d4af37; }
+#add-book-form label, #edit-book-form label { color: #a9c2a6; font-family: "Cinzel", serif; font-size: 11.5px; text-transform: uppercase; letter-spacing: 1px; }
+#add-book-form input, #add-book-form textarea, #edit-book-form input, #edit-book-form textarea {
   background: rgba(16,32,26,.7); border: 1px solid #3a5240; color: #ead9b3; font-family: "EB Garamond", serif; font-size: 15px;
 }
-#add-book-form input:focus, #add-book-form textarea:focus {
+#add-book-form input:focus, #add-book-form textarea:focus, #edit-book-form input:focus, #edit-book-form textarea:focus {
   outline: none; border-color: #d4af37; box-shadow: 0 0 0 3px rgba(212,175,55,.15);
 }
-#add-book-form input[type="file"] { padding: 8px; }
-#add-book-form button {
+#add-book-form input[type="file"], #edit-book-form input[type="file"] { padding: 8px; }
+#add-book-form button, #edit-book-form button {
   font-family: "Cinzel", serif; letter-spacing: 1px; text-transform: uppercase; font-size: 13px;
   background: linear-gradient(180deg,#eecf7a,#c9a227); color: #16281f; border: 1px solid #8a6d1c;
   box-shadow: 0 4px 14px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.4);
 }
-#add-book-form button:hover { background: linear-gradient(180deg,#f5da8f,#d4af37); }
-#add-book-status { color: #8fae8b; }
+#add-book-form button:hover, #edit-book-form button:hover { background: linear-gradient(180deg,#f5da8f,#d4af37); }
+#add-book-status, #edit-book-status { color: #8fae8b; }
 
 /* Themed scrollbars, inside the library only */
 #app { scrollbar-color: #4d6b52 #10201a; }

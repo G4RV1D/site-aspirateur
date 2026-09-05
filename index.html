@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=EB+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Uncial+Antiqua&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=3" />
+<link rel="stylesheet" href="style.css?v=4" />
 </head>
 <body>
 
@@ -196,9 +196,52 @@
         <p id="bm-summary"></p>
         <h4 id="bm-extract-title" hidden>Extrait</h4>
         <p id="bm-extract" class="e-extract"></p>
-        <a id="bm-download" class="e-btn e-btn-gold" href="#" download>Télécharger l'ebook</a>
+        <div class="e-book-modal-actions">
+          <a id="bm-download" class="e-btn e-btn-gold" href="#" download>Télécharger l'ebook</a>
+          <button id="bm-edit-btn" class="e-btn e-btn-ghost" type="button" hidden>Modifier les informations</button>
+        </div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- Edit-book modal (admins only) — fill in missing author/date/summary/etc. -->
+<div id="edit-book-modal" class="modal-overlay" hidden>
+  <div class="modal-box">
+    <button class="modal-close" type="button" data-close="edit-book-modal">&times;</button>
+    <h2>Modifier le livre</h2>
+    <form id="edit-book-form">
+      <input type="hidden" name="book_id" />
+      <label>Titre *
+        <input type="text" name="title" required maxlength="300" />
+      </label>
+      <label>Auteur
+        <input type="text" name="author" maxlength="200" />
+      </label>
+      <label>Genre *
+        <input type="text" name="genre" required maxlength="100" placeholder="Fantasy, Science-fiction, Romance…" list="genre-suggestions" />
+      </label>
+      <label>Date de sortie
+        <input type="text" name="release_date" maxlength="50" placeholder="2014 ou 12/03/2014" />
+      </label>
+      <label>Tags (séparés par des virgules)
+        <input type="text" name="tags" maxlength="300" placeholder="tome1, saga, best-seller" />
+      </label>
+      <label>Résumé
+        <textarea name="summary" rows="3" maxlength="2000"></textarea>
+      </label>
+      <label>Extrait
+        <textarea name="extract" rows="4" maxlength="4000"></textarea>
+      </label>
+      <label>Remplacer la couverture (facultatif)
+        <input type="file" name="cover" accept="image/*" />
+      </label>
+      <label>Remplacer le fichier ebook (facultatif)
+        <input type="file" name="ebook" accept=".epub,.pdf,.mobi,.azw3,.txt" />
+      </label>
+      <button type="submit">Enregistrer les modifications</button>
+      <p id="edit-book-status" class="d-fine" role="status"></p>
+    </form>
   </div>
 </div>
 
@@ -242,7 +285,7 @@
   </div>
 </div>
 
-<script src="config.js?v=3"></script>
-<script src="app.js?v=3"></script>
+<script src="config.js?v=4"></script>
+<script src="app.js?v=4"></script>
 </body>
 </html>
