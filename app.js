@@ -116,8 +116,16 @@
     show($("#app"));
     $("#e-welcome").textContent = state.name ? `Bienvenue, ${state.name}` : "";
     $("#e-add-book-btn").hidden = state.role !== "admin";
-    await loadBooks();
+    // The oath is sworn anew every time the library is entered.
+    show($("#e-oath"));
+    hide($("#e-library-content"));
   }
+
+  $("#e-oath-btn").addEventListener("click", async () => {
+    hide($("#e-oath"));
+    show($("#e-library-content"));
+    await loadBooks();
+  });
 
   function leaveLibrary() {
     clearSession();
@@ -180,10 +188,11 @@
     grid.innerHTML = "";
     $("#e-empty").hidden = items.length !== 0;
 
-    items.forEach((book) => {
+    items.forEach((book, i) => {
       const card = document.createElement("button");
       card.className = "e-card";
       card.type = "button";
+      card.style.setProperty("--i", i);
       card.innerHTML = `
         <div class="e-card-cover">${book.cover_url ? `<img loading="lazy" src="${API}${book.cover_url}" alt="Couverture de ${escapeHtml(book.title)}" />` : ""}</div>
         <div class="e-card-title">${escapeHtml(book.title)}</div>
