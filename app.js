@@ -116,7 +116,8 @@
     show($("#app"));
     $("#e-welcome").textContent = state.name ? `Bienvenue, ${state.name}` : "";
     $("#e-add-book-btn").hidden = state.role !== "admin";
-    // The oath is sworn anew every time the library is entered.
+    // Only the oath is visible at first — header and library reveal after it's sworn.
+    hide($("#e-header"));
     show($("#e-oath"));
     hide($("#e-library-content"));
   }
@@ -127,6 +128,7 @@
     setTimeout(() => {
       hide(oath);
       oath.classList.remove("leaving");
+      show($("#e-header"));
       show($("#e-library-content"));
     }, 500);
     await loadBooks();
