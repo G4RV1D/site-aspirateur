@@ -1,0 +1,179 @@
+/* ============================================================
+   Shared basics
+   ============================================================ */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { font-family: "Poppins", system-ui, sans-serif; color: #222; }
+[hidden] { display: none !important; }
+img { max-width: 100%; display: block; }
+button { font-family: inherit; cursor: pointer; }
+a { color: inherit; }
+
+/* ============================================================
+   SCREEN 1 — decoy vacuum-cleaner site
+   ============================================================ */
+#decoy { background: #fbfbfc; }
+.d-wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+.d-header { position: sticky; top: 0; background: #fff; border-bottom: 1px solid #eceff1; z-index: 10; }
+.d-nav { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+.d-logo { font-weight: 700; font-size: 20px; letter-spacing: .5px; color: #1c3d4a; }
+.d-logo span { color: #3aa0c1; }
+.d-nav nav { display: flex; align-items: center; gap: 24px; font-size: 14px; }
+.d-nav nav a { text-decoration: none; color: #445; }
+.d-account-link { background: none; border: 1px solid #cfd8dc; border-radius: 20px; padding: 6px 16px; font-size: 13px; color: #445; }
+.d-account-link:hover { background: #f0f4f6; }
+
+.d-hero { background: linear-gradient(135deg, #eaf4f7 0%, #f8fbfc 100%); padding: 64px 0; }
+.d-hero-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; align-items: center; }
+.d-eyebrow { color: #3aa0c1; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; font-size: 12px; margin: 0 0 8px; }
+.d-hero h1 { font-size: 40px; line-height: 1.15; margin: 0 0 16px; color: #16303a; }
+.d-sub { color: #55636a; line-height: 1.6; margin: 0 0 24px; }
+.d-cta { display: inline-block; background: #1c3d4a; color: #fff; padding: 14px 28px; border-radius: 6px; text-decoration: none; font-weight: 600; }
+.d-cta:hover { background: #274e5e; }
+.d-fine { font-size: 12px; color: #8b98a0; margin-top: 8px; }
+.d-hero-art { display: flex; justify-content: center; }
+
+.d-features { padding: 64px 0; }
+.d-features h2, .d-specs h2, .d-faq h2 { text-align: left; color: #16303a; margin-bottom: 24px; }
+.d-feature-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.d-feature { background: #fff; border: 1px solid #eceff1; border-radius: 10px; padding: 20px; }
+.d-feature h3 { margin: 0 0 8px; font-size: 16px; color: #1c3d4a; }
+.d-feature p { margin: 0; font-size: 14px; color: #667; line-height: 1.5; }
+
+.d-specs { background: #f6f9fa; padding: 64px 0; }
+.d-specs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+.d-specs table { width: 100%; border-collapse: collapse; }
+.d-specs td { padding: 10px 0; border-bottom: 1px solid #e3e9eb; font-size: 14px; color: #445; }
+.d-specs td:last-child { text-align: right; font-weight: 600; color: #1c3d4a; }
+
+.d-signup-card { background: #fff; border: 1px solid #eceff1; border-radius: 12px; padding: 28px; }
+.d-signup-card h2 { margin-top: 0; font-size: 20px; }
+.d-signup-card p { color: #667; font-size: 14px; }
+#signup-form label, #unlock-form label, #add-book-form label { display: block; font-size: 13px; color: #445; margin-bottom: 14px; }
+#signup-form input, #signup-form textarea,
+#unlock-form input,
+#add-book-form input, #add-book-form textarea {
+  width: 100%; margin-top: 6px; padding: 10px 12px; border: 1px solid #cfd8dc; border-radius: 6px; font-size: 14px; font-family: inherit;
+}
+#signup-form button, #unlock-form button, #add-book-form button {
+  width: 100%; background: #1c3d4a; color: #fff; border: none; border-radius: 6px; padding: 12px; font-weight: 600; font-size: 14px;
+}
+#signup-form button:hover, #unlock-form button:hover, #add-book-form button:hover { background: #274e5e; }
+
+.d-faq { padding: 64px 0 80px; }
+.d-faq details { border-bottom: 1px solid #eceff1; padding: 14px 0; }
+.d-faq summary { cursor: pointer; font-weight: 600; color: #1c3d4a; }
+.d-faq p { color: #667; font-size: 14px; margin: 10px 0 0; }
+
+.d-footer { border-top: 1px solid #eceff1; padding: 24px 0; text-align: center; font-size: 13px; color: #99a3a8; }
+
+@media (max-width: 800px) {
+  .d-hero-grid, .d-specs-grid { grid-template-columns: 1fr; }
+  .d-feature-grid { grid-template-columns: repeat(2, 1fr); }
+  .d-hero h1 { font-size: 30px; }
+}
+
+/* ============================================================
+   Modals (shared)
+   ============================================================ */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(10, 15, 12, .6);
+  display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
+}
+.modal-box {
+  background: #fff; border-radius: 10px; max-width: 480px; width: 100%;
+  padding: 32px; position: relative; max-height: 88vh; overflow-y: auto;
+}
+.modal-close {
+  position: absolute; top: 12px; right: 14px; background: none; border: none;
+  font-size: 22px; color: #99a3a8; line-height: 1;
+}
+.modal-close:hover { color: #445; }
+
+/* ============================================================
+   SCREEN 2 — the Elven Library (Lord-of-the-Rings styled)
+   ============================================================ */
+#app {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(201,162,39,.08), transparent 40%),
+    radial-gradient(circle at 80% 10%, rgba(201,162,39,.06), transparent 35%),
+    #10201a;
+  color: #ead9b3;
+  font-family: "EB Garamond", Georgia, serif;
+}
+#app .e-wrap { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+.e-header {
+  background: linear-gradient(180deg, #16281f 0%, #10201a 100%);
+  border-bottom: 1px solid #3a5240;
+  position: sticky; top: 0; z-index: 10;
+}
+.e-header-inner { display: flex; align-items: center; justify-content: space-between; height: 76px; }
+.e-brand { font-family: "Cinzel Decorative", serif; font-size: 20px; color: #d4af37; display: flex; align-items: center; gap: 10px; letter-spacing: .5px; }
+.e-brand-glyph { color: #d4af37; }
+.e-header-actions { display: flex; align-items: center; gap: 14px; font-family: "Cinzel", serif; font-size: 13px; }
+.e-welcome { color: #a9c2a6; }
+
+.e-btn {
+  font-family: "Cinzel", serif; font-size: 13px; letter-spacing: .5px;
+  border-radius: 4px; padding: 9px 16px; border: 1px solid #4d6b52; background: transparent; color: #ead9b3;
+}
+.e-btn:hover { background: rgba(212,175,55,.08); border-color: #d4af37; }
+.e-btn-ghost { }
+.e-btn-gold { display: inline-block; text-decoration: none; background: linear-gradient(180deg,#e6c65c,#c9a227); color: #16281f; border: none; font-weight: 600; margin-top: 18px; }
+.e-btn-gold:hover { background: linear-gradient(180deg,#f0d472,#d4af37); }
+
+.e-layout { display: grid; grid-template-columns: 240px 1fr; gap: 32px; padding: 32px 24px 64px; }
+.e-sidebar h3 { font-family: "Cinzel", serif; font-size: 14px; color: #a9c2a6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; }
+.e-genre-list { display: flex; flex-direction: column; gap: 4px; }
+.e-genre {
+  text-align: left; background: none; border: none; color: #cdbf94; font-family: "EB Garamond", serif;
+  font-size: 16px; padding: 8px 10px; border-radius: 4px; border-left: 3px solid transparent;
+}
+.e-genre:hover { background: rgba(212,175,55,.06); }
+.e-genre.active { color: #d4af37; border-left-color: #d4af37; background: rgba(212,175,55,.08); }
+
+.e-toolbar { margin-bottom: 24px; }
+#e-search {
+  width: 100%; max-width: 420px; padding: 10px 14px; border-radius: 4px; border: 1px solid #3a5240;
+  background: #16281f; color: #ead9b3; font-family: "EB Garamond", serif; font-size: 15px;
+}
+#e-search::placeholder { color: #6f8a72; }
+
+.e-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 22px; }
+.e-card { cursor: pointer; text-align: left; }
+.e-card-cover {
+  width: 100%; aspect-ratio: 2 / 3; background: #1c3226 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="150"><rect width="100" height="150" fill="%231c3226"/></svg>') center/cover;
+  border-radius: 4px; border: 1px solid #3a5240; overflow: hidden; position: relative;
+  box-shadow: 0 6px 16px rgba(0,0,0,.35);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.e-card:hover .e-card-cover { transform: translateY(-4px); box-shadow: 0 10px 22px rgba(0,0,0,.45); border-color: #d4af37; }
+.e-card-cover img { width: 100%; height: 100%; object-fit: cover; }
+.e-card-title { margin-top: 10px; font-size: 15px; color: #ead9b3; line-height: 1.3; }
+.e-card-author { font-size: 13px; color: #8fae8b; margin-top: 2px; }
+
+.e-empty { color: #8fae8b; font-style: italic; margin-top: 40px; }
+
+/* Book detail modal, elvish flavour */
+.e-book-modal { max-width: 760px; background: #16281f; color: #ead9b3; border: 1px solid #d4af37; }
+.e-book-modal .modal-close { color: #ead9b3; }
+.e-book-modal-grid { display: grid; grid-template-columns: 220px 1fr; gap: 26px; }
+.e-book-modal-grid img { border-radius: 6px; border: 1px solid #3a5240; }
+.e-book-modal-info h2 { font-family: "Cinzel Decorative", serif; color: #d4af37; margin: 0 0 4px; font-size: 22px; }
+.e-book-author { margin: 0; color: #a9c2a6; font-style: italic; }
+.e-book-meta { color: #8fae8b; font-size: 14px; margin: 6px 0 12px; }
+.e-book-modal-info h4 { font-family: "Cinzel", serif; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: #a9c2a6; margin: 16px 0 6px; }
+.e-book-modal-info p { line-height: 1.6; margin: 0; }
+.e-extract { font-style: italic; color: #cdbf94; border-left: 2px solid #d4af37; padding-left: 12px; }
+.e-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.e-tags span { background: rgba(212,175,55,.12); border: 1px solid #4d6b52; color: #d4af37; font-family: "Cinzel", serif; font-size: 11px; padding: 3px 10px; border-radius: 20px; }
+
+@media (max-width: 720px) {
+  .e-layout { grid-template-columns: 1fr; }
+  .e-book-modal-grid { grid-template-columns: 1fr; }
+}
+
+/* Add-book / unlock modals inherit light theme by default via .modal-box */
