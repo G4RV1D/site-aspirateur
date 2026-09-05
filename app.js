@@ -122,8 +122,13 @@
   }
 
   $("#e-oath-btn").addEventListener("click", async () => {
-    hide($("#e-oath"));
-    show($("#e-library-content"));
+    const oath = $("#e-oath");
+    oath.classList.add("leaving");
+    setTimeout(() => {
+      hide(oath);
+      oath.classList.remove("leaving");
+      show($("#e-library-content"));
+    }, 500);
     await loadBooks();
   });
 

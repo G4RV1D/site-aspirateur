@@ -112,10 +112,10 @@ a { color: inherit; }
   position: relative;
   isolation: isolate;
   background:
-    radial-gradient(ellipse 900px 500px at 15% -5%, rgba(212,175,55,.10), transparent 55%),
-    radial-gradient(ellipse 700px 500px at 90% 0%, rgba(212,175,55,.07), transparent 50%),
-    radial-gradient(ellipse 1200px 800px at 50% 110%, rgba(0,0,0,.55), transparent 60%),
-    linear-gradient(180deg, #0d1912 0%, #10201a 40%, #0c1712 100%);
+    radial-gradient(ellipse 900px 500px at 15% -5%, rgba(212,175,55,.12), transparent 55%),
+    radial-gradient(ellipse 700px 500px at 90% 0%, rgba(212,175,55,.08), transparent 50%),
+    radial-gradient(ellipse 1400px 900px at 50% 115%, rgba(0,0,0,.6), transparent 60%),
+    linear-gradient(160deg, #1b4d3a 0%, #123524 22%, #0c2118 42%, #061109 68%, #000000 100%);
   color: #ead9b3;
   font-family: "EB Garamond", Georgia, serif;
   animation: eFadeIn .7s ease;
@@ -242,37 +242,40 @@ a { color: inherit; }
 .e-empty { color: #8fae8b; font-style: italic; margin-top: 60px; text-align: center; font-size: 17px; }
 .e-empty::before { content: "❦"; display: block; font-size: 26px; color: #4d6b52; margin-bottom: 10px; }
 
-/* The oath screen — sworn anew each time the library is entered */
+/* The oath screen — a full-page ceremonial title, sworn anew each visit */
 .e-oath {
   min-height: calc(100vh - 80px);
   display: flex; align-items: center; justify-content: center;
   padding: 60px 24px;
+  transition: opacity .5s ease, transform .5s ease;
 }
+.e-oath.leaving { opacity: 0; transform: scale(.97); pointer-events: none; }
+
 .e-oath-box {
-  max-width: 620px; text-align: center; position: relative; padding: 44px 40px;
-  border: 1px solid rgba(212,175,55,.35); border-radius: 4px;
-  background: linear-gradient(160deg, rgba(24,46,34,.55), rgba(16,32,26,.4));
-  box-shadow: 0 30px 70px rgba(0,0,0,.5), inset 0 0 40px rgba(212,175,55,.04);
-  animation: eFadeIn .8s ease;
+  max-width: 780px; text-align: center; position: relative;
+  animation: eFadeIn .9s ease;
 }
 .e-oath-box::before, .e-oath-box::after {
-  content: "✦"; position: absolute; color: #d4af37; font-size: 15px; left: 50%; transform: translateX(-50%);
+  content: "✦"; display: block; color: #d4af37; font-size: 18px; margin: 0 auto 22px;
+  animation: eGlow 3.5s ease-in-out infinite;
 }
-.e-oath-box::before { top: 16px; }
-.e-oath-box::after { bottom: 16px; }
+.e-oath-box::after { margin: 26px auto 0; }
 .e-oath-text {
-  font-family: "Cinzel Decorative", serif; font-size: 19px; line-height: 1.7; color: #e9cd6f;
-  margin: 0 0 20px;
+  font-family: "Cinzel Decorative", serif; font-weight: 700; font-size: clamp(26px, 4.2vw, 42px);
+  line-height: 1.45; margin: 0 0 28px; letter-spacing: .3px;
+  background: linear-gradient(180deg, #f6e3a1, #c9a227);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  text-shadow: 0 0 40px rgba(212,175,55,.25);
 }
 .e-oath-text-2 {
-  font-family: "EB Garamond", serif; font-style: italic; font-size: 19px; color: #cdbf94;
-  margin: 0 0 30px;
+  font-family: "EB Garamond", serif; font-style: italic; font-size: clamp(18px, 2.2vw, 24px);
+  color: #dccd9c; line-height: 1.6; margin: 0 auto 40px; max-width: 620px;
 }
-#e-oath-btn { margin-top: 4px; padding: 13px 36px; font-size: 14px; }
+#e-oath-btn { margin-top: 4px; padding: 15px 44px; font-size: 14.5px; }
 
 @media (max-width: 560px) {
-  .e-oath-box { padding: 34px 22px; }
-  .e-oath-text, .e-oath-text-2 { font-size: 16.5px; }
+  .e-oath-text { font-size: 26px; }
+  .e-oath-text-2 { font-size: 17px; }
 }
 
 /* Book detail modal, elvish flavour — an illuminated-manuscript frame */
