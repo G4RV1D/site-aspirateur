@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=EB+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Uncial+Antiqua&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=4" />
+<link rel="stylesheet" href="style.css?v=5" />
 </head>
 <body>
 
@@ -141,8 +141,10 @@
       </div>
       <div class="e-header-actions">
         <span id="e-welcome" class="e-welcome"></span>
+        <button id="e-request-book-btn" class="e-btn e-btn-ghost">Demander un livre</button>
+        <button id="e-book-requests-btn" class="e-btn e-btn-ghost" hidden>Demandes des lecteurs</button>
         <button id="e-add-book-btn" class="e-btn e-btn-ghost" hidden>+ Ajouter un livre</button>
-        <button id="e-logout" class="e-btn e-btn-ghost">Ce qui est fait est fait</button>
+        <button id="e-logout" class="e-btn e-btn-ghost">Larcin Effectué !</button>
       </div>
     </div>
   </header>
@@ -150,18 +152,26 @@
   <section id="e-oath" class="e-oath">
     <div class="e-oath-box">
       <p class="e-oath-text">
-        Messieurs Aelendir, Fendrallon, Isilwen et Maelgorn ont l'insigne honneur
-        de vous présenter la Bibliothèque des Chapardeurs.
+        Messieurs Aelendir, Fendrallon, Isilwen et Maelgorn sont fiers de vous présenter
+        <span class="e-oath-title">la Bibliothèque des Chapardeurs.</span>
       </p>
       <p class="e-oath-text e-oath-text-2">
-        Vous devez jurer solennellement que vos pensées seront aussi
-        curieuses qu'authentiquement malhonnêtes.
+        Vous devez promettre que vos intentions sont obscures.
       </p>
       <button id="e-oath-btn" class="e-btn e-btn-gold" type="button">Je le jure</button>
+      <p class="e-oath-note">
+        Une fois votre méfait achevé, songez à refermer la porte derrière vous
+        en cliquant sur « Larcin Effectué ! ».
+      </p>
     </div>
   </section>
 
   <div id="e-library-content" class="e-wrap e-layout" hidden>
+    <section id="e-recent" class="e-recent" hidden>
+      <h3 class="e-recent-title">✦ Derniers ajouts</h3>
+      <div id="e-recent-row" class="e-recent-row"></div>
+    </section>
+
     <aside class="e-sidebar">
       <h3>Royaumes &amp; genres</h3>
       <nav id="e-genre-list" class="e-genre-list">
@@ -199,6 +209,7 @@
         <div class="e-book-modal-actions">
           <a id="bm-download" class="e-btn e-btn-gold" href="#" download>Télécharger l'ebook</a>
           <button id="bm-edit-btn" class="e-btn e-btn-ghost" type="button" hidden>Modifier les informations</button>
+          <button id="bm-delete-btn" class="e-btn e-btn-danger" type="button" hidden>Supprimer ce livre</button>
         </div>
       </div>
     </div>
@@ -245,6 +256,54 @@
   </div>
 </div>
 
+<!-- Delete-book confirmation modal (admins only) -->
+<div id="delete-confirm-modal" class="modal-overlay" hidden>
+  <div class="modal-box e-confirm-box">
+    <button class="modal-close" type="button" data-close="delete-confirm-modal">&times;</button>
+    <h2>Supprimer ce livre ?</h2>
+    <p>Tu es sur le point de supprimer définitivement « <strong id="delete-confirm-title"></strong> » de la
+      bibliothèque, ainsi que sa couverture et son fichier ebook. Cette action est irréversible.</p>
+    <div class="e-confirm-actions">
+      <button id="delete-confirm-cancel" class="e-btn e-btn-ghost" type="button">Annuler</button>
+      <button id="delete-confirm-go" class="e-btn e-btn-danger" type="button">Oui, supprimer</button>
+    </div>
+    <p id="delete-confirm-status" class="d-fine" role="status"></p>
+  </div>
+</div>
+
+<!-- Request-a-book modal (any approved reader) -->
+<div id="request-book-modal" class="modal-overlay" hidden>
+  <div class="modal-box">
+    <button class="modal-close" type="button" data-close="request-book-modal">&times;</button>
+    <h2>Demander un livre</h2>
+    <p class="d-fine">Il manque un ouvrage à la bibliothèque ? Fais-en la demande, elle sera transmise aux
+      administrateurs.</p>
+    <form id="request-book-form">
+      <label>Titre *
+        <input type="text" name="title" required maxlength="300" />
+      </label>
+      <label>Auteur (si connu)
+        <input type="text" name="author" maxlength="200" />
+      </label>
+      <label>Précisions (facultatif)
+        <textarea name="note" rows="3" maxlength="1000"></textarea>
+      </label>
+      <button type="submit">Envoyer la demande</button>
+      <p id="request-book-status" class="d-fine" role="status"></p>
+    </form>
+  </div>
+</div>
+
+<!-- Book-requests panel (admins only) -->
+<div id="book-requests-modal" class="modal-overlay" hidden>
+  <div class="modal-box e-requests-box">
+    <button class="modal-close" type="button" data-close="book-requests-modal">&times;</button>
+    <h2>Demandes des lecteurs</h2>
+    <div id="book-requests-list" class="e-requests-list"></div>
+    <p id="book-requests-empty" class="d-fine" hidden>Aucune demande en attente pour le moment.</p>
+  </div>
+</div>
+
 <!-- Add-book modal (admins only) -->
 <div id="add-book-modal" class="modal-overlay" hidden>
   <div class="modal-box">
@@ -285,7 +344,7 @@
   </div>
 </div>
 
-<script src="config.js?v=4"></script>
-<script src="app.js?v=4"></script>
+<script src="config.js?v=5"></script>
+<script src="app.js?v=5"></script>
 </body>
 </html>

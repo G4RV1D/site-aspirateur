@@ -267,14 +267,22 @@ a { color: inherit; }
   -webkit-background-clip: text; background-clip: text; color: transparent;
   text-shadow: 0 0 40px rgba(212,175,55,.25);
 }
+.e-oath-title {
+  display: block; margin-top: 10px; font-size: clamp(34px, 5.4vw, 54px); letter-spacing: .5px;
+}
 .e-oath-text-2 {
   font-family: "EB Garamond", serif; font-style: italic; font-size: clamp(18px, 2.2vw, 24px);
   color: #dccd9c; line-height: 1.6; margin: 0 auto 40px; max-width: 620px;
 }
 #e-oath-btn { margin-top: 4px; padding: 15px 44px; font-size: 14.5px; }
+.e-oath-note {
+  font-family: "EB Garamond", serif; font-style: italic; font-size: 13.5px;
+  color: #7c9a79; margin: 18px auto 0; max-width: 480px; line-height: 1.5;
+}
 
 @media (max-width: 560px) {
   .e-oath-text { font-size: 26px; }
+  .e-oath-title { font-size: 32px; }
   .e-oath-text-2 { font-size: 17px; }
 }
 
@@ -325,30 +333,84 @@ a { color: inherit; }
 /* Add-book / edit-book forms, restyled to match — this is admin tooling inside the real site */
 .e-book-modal-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px; align-items: center; }
 
-#add-book-modal .modal-box, #edit-book-modal .modal-box {
+#add-book-modal .modal-box, #edit-book-modal .modal-box, #delete-confirm-modal .modal-box,
+#request-book-modal .modal-box, #book-requests-modal .modal-box {
   background: linear-gradient(160deg, #182e22, #10201a); color: #ead9b3; border: 1px solid #d4af37;
   box-shadow: 0 0 0 1px rgba(212,175,55,.15), 0 24px 60px rgba(0,0,0,.55);
 }
-#add-book-modal h2, #edit-book-modal h2 {
+#add-book-modal h2, #edit-book-modal h2, #delete-confirm-modal h2,
+#request-book-modal h2, #book-requests-modal h2 {
   font-family: "Cinzel Decorative", serif; color: #e9cd6f; font-size: 21px; margin-top: 0;
 }
-#add-book-modal .modal-close, #edit-book-modal .modal-close { color: #cdbf94; }
-#add-book-modal .modal-close:hover, #edit-book-modal .modal-close:hover { color: #d4af37; }
-#add-book-form label, #edit-book-form label { color: #a9c2a6; font-family: "Cinzel", serif; font-size: 11.5px; text-transform: uppercase; letter-spacing: 1px; }
-#add-book-form input, #add-book-form textarea, #edit-book-form input, #edit-book-form textarea {
+#add-book-modal .modal-close, #edit-book-modal .modal-close, #delete-confirm-modal .modal-close,
+#request-book-modal .modal-close, #book-requests-modal .modal-close { color: #cdbf94; }
+#add-book-modal .modal-close:hover, #edit-book-modal .modal-close:hover, #delete-confirm-modal .modal-close:hover,
+#request-book-modal .modal-close:hover, #book-requests-modal .modal-close:hover { color: #d4af37; }
+#add-book-modal p, #edit-book-modal p, #delete-confirm-modal p, #request-book-modal p { color: #a9c2a6; }
+#add-book-form label, #edit-book-form label, #request-book-form label { color: #a9c2a6; font-family: "Cinzel", serif; font-size: 11.5px; text-transform: uppercase; letter-spacing: 1px; }
+#add-book-form input, #add-book-form textarea, #edit-book-form input, #edit-book-form textarea,
+#request-book-form input, #request-book-form textarea {
   background: rgba(16,32,26,.7); border: 1px solid #3a5240; color: #ead9b3; font-family: "EB Garamond", serif; font-size: 15px;
 }
-#add-book-form input:focus, #add-book-form textarea:focus, #edit-book-form input:focus, #edit-book-form textarea:focus {
+#add-book-form input:focus, #add-book-form textarea:focus, #edit-book-form input:focus, #edit-book-form textarea:focus,
+#request-book-form input:focus, #request-book-form textarea:focus {
   outline: none; border-color: #d4af37; box-shadow: 0 0 0 3px rgba(212,175,55,.15);
 }
 #add-book-form input[type="file"], #edit-book-form input[type="file"] { padding: 8px; }
-#add-book-form button, #edit-book-form button {
+#add-book-form button, #edit-book-form button, #request-book-form button {
   font-family: "Cinzel", serif; letter-spacing: 1px; text-transform: uppercase; font-size: 13px;
   background: linear-gradient(180deg,#eecf7a,#c9a227); color: #16281f; border: 1px solid #8a6d1c;
   box-shadow: 0 4px 14px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.4);
 }
-#add-book-form button:hover, #edit-book-form button:hover { background: linear-gradient(180deg,#f5da8f,#d4af37); }
-#add-book-status, #edit-book-status { color: #8fae8b; }
+#add-book-form button:hover, #edit-book-form button:hover, #request-book-form button:hover { background: linear-gradient(180deg,#f5da8f,#d4af37); }
+#add-book-status, #edit-book-status, #request-book-status, #delete-confirm-status { color: #8fae8b; }
+
+/* Danger button — used only for the "supprimer ce livre" / "oui, supprimer" actions */
+.e-btn-danger {
+  border-color: #7a3a3a; color: #e6a5a5;
+}
+.e-btn-danger:hover {
+  background: rgba(200,70,70,.12); border-color: #c85050; color: #ffc7c7; box-shadow: 0 0 14px rgba(200,70,70,.2);
+}
+
+.e-confirm-box p { line-height: 1.6; }
+.e-confirm-actions { display: flex; gap: 12px; margin-top: 20px; }
+
+/* Reader book-request panel (admin) */
+.e-requests-box { max-width: 620px; }
+.e-requests-list { display: flex; flex-direction: column; gap: 14px; margin-top: 8px; max-height: 60vh; overflow-y: auto; }
+.e-request-row {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+  border: 1px solid #3a5240; border-radius: 6px; padding: 14px 16px; background: rgba(16,32,26,.5);
+}
+.e-request-info { font-family: "EB Garamond", serif; font-size: 15px; color: #ead9b3; }
+.e-request-note { font-style: italic; color: #a9c2a6; margin-top: 4px; font-size: 14px; }
+.e-request-meta { color: #6f8a72; font-size: 12.5px; margin-top: 6px; font-family: "Cinzel", serif; letter-spacing: .4px; }
+.e-request-row .e-btn { flex-shrink: 0; }
+
+/* "Derniers ajouts" rail — spans the full width, above the sidebar/grid row */
+.e-recent { grid-column: 1 / -1; margin-bottom: 8px; }
+.e-recent-title {
+  font-family: "Cinzel", serif; font-size: 13px; color: #a9c2a6; text-transform: uppercase;
+  letter-spacing: 2px; margin: 0 0 16px;
+}
+.e-recent-row { display: flex; gap: 18px; overflow-x: auto; padding-bottom: 10px; }
+.e-recent-card {
+  cursor: pointer; text-align: left; background: none; border: none; padding: 0; color: inherit;
+  flex: 0 0 120px;
+}
+.e-recent-cover {
+  width: 120px; aspect-ratio: 2 / 3;
+  background: linear-gradient(160deg, #21392b, #142219) center/cover;
+  border-radius: 3px; border: 1px solid #3a5240; overflow: hidden;
+  box-shadow: 0 6px 16px rgba(0,0,0,.4);
+  transition: transform .2s ease, border-color .2s ease;
+}
+.e-recent-card:hover .e-recent-cover { transform: translateY(-4px); border-color: #d4af37; }
+.e-recent-cover img { width: 100%; height: 100%; object-fit: cover; }
+.e-recent-card-title {
+  margin-top: 8px; font-size: 12.5px; color: #cdbf94; line-height: 1.3; font-variant: small-caps;
+}
 
 /* Themed scrollbars, inside the library only */
 #app { scrollbar-color: #4d6b52 #10201a; }

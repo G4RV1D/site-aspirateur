@@ -116,6 +116,7 @@
     show($("#app"));
     $("#e-welcome").textContent = state.name ? `Bienvenue, ${state.name}` : "";
     $("#e-add-book-btn").hidden = state.role !== "admin";
+    $("#e-book-requests-btn").hidden = state.role !== "admin";
     // Only the oath is visible at first — header and library reveal after it's sworn.
     hide($("#e-header"));
     show($("#e-oath"));
@@ -132,6 +133,7 @@
       show($("#e-library-content"));
     }, 500);
     await loadBooks();
+    await loadRecent();
   });
 
   function leaveLibrary() {
@@ -215,6 +217,37 @@
     renderGrid();
   });
 
+  // ---------- "Derniers ajouts" rail — always the whole library's newest, regardless of the active genre filter ----------
+  async function loadRecent() {
+    try {
+      const data = await api("/api/books?code=" + encodeURIComponent(state.code), {
+        headers: { "x-access-code": state.code },
+      });
+      renderRecent((data.books || []).slice(0, 10));
+    } catch (err) {
+      // silent — the rail simply stays empty if this fails
+    }
+  }
+
+  function renderRecent(items) {
+    const section = $("#e-recent");
+    const row = $("#e-recent-row");
+    row.innerHTML = "";
+    if (!items.length) { section.hidden = true; return; }
+    section.hidden = false;
+    items.forEach((book) => {
+      const card = document.createElement("button");
+      card.className = "e-recent-card";
+      card.type = "button";
+      card.innerHTML = `
+        <div class="e-recent-cover">${book.cover_url ? `<img loading="lazy" src="${API}${book.cover_url}" alt="Couverture de ${escapeHtml(book.title)}" />` : ""}</div>
+        <div class="e-recent-card-title">${escapeHtml(book.title)}</div>
+      `;
+      card.addEventListener("click", () => openBook(book.id));
+      row.appendChild(card);
+    });
+  }
+
   function escapeHtml(s) {
     return String(s || "").replace(/[&<>"']/g, (c) => ({
       "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
@@ -245,6 +278,7 @@
       if (b.download_url) { dl.href = API + b.download_url; dl.hidden = false; }
       else { dl.hidden = true; }
       $("#bm-edit-btn").hidden = state.role !== "admin";
+      $("#bm-delete-btn").hidden = state.role !== "admin";
       openModal("book-modal");
     } catch (err) {
       alert("Impossible d'ouvrir ce livre : " + err.message);
@@ -292,6 +326,135 @@
       status.textContent = "Erreur : " + err.message;
     }
   });
+
+  // ---------- admin: delete a book (with confirmation) ----------
+  let pendingDeleteId = null;
+
+  $("#bm-delete-btn").addEventListener("click", () => {
+    const b = state.currentBook;
+    if (!b) return;
+    pendingDeleteId = b.id;
+    $("#delete-confirm-title").textContent = b.title;
+    $("#delete-confirm-status").textContent = "";
+    closeModal("book-modal");
+    openModal("delete-confirm-modal");
+  });
+
+  $("#delete-confirm-cancel").addEventListener("click", () => {
+    pendingDeleteId = null;
+    closeModal("delete-confirm-modal");
+  });
+
+  $("#delete-confirm-go").addEventListener("click", async () => {
+    if (!pendingDeleteId) return;
+    const status = $("#delete-confirm-status");
+    status.textContent = "Suppression…";
+    try {
+      const res = await fetch(API + "/api/admin/book/" + encodeURIComponent(pendingDeleteId), {
+        method: "DELETE",
+        headers: { "x-access-code": state.code },
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok) throw new Error((data && data.error) || "Erreur");
+      pendingDeleteId = null;
+      closeModal("delete-confirm-modal");
+      await loadBooks();
+      await loadRecent();
+    } catch (err) {
+      status.textContent = "Erreur : " + err.message;
+    }
+  });
+
+  // ---------- reader: request a missing book ----------
+  $("#e-request-book-btn").addEventListener("click", () => {
+    $("#request-book-status").textContent = "";
+    $("#request-book-form").reset();
+    openModal("request-book-modal");
+  });
+
+  $("#request-book-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const status = $("#request-book-status");
+    status.textContent = "Envoi…";
+    try {
+      await api("/api/book-requests", {
+        method: "POST",
+        headers: { "content-type": "application/json", "x-access-code": state.code },
+        body: JSON.stringify({
+          title: form.title.value.trim(),
+          author: form.author.value.trim(),
+          note: form.note.value.trim(),
+        }),
+      });
+      status.textContent = "Merci, ta demande a été transmise !";
+      form.reset();
+      setTimeout(() => closeModal("request-book-modal"), 900);
+    } catch (err) {
+      status.textContent = "Erreur : " + err.message;
+    }
+  });
+
+  // ---------- admin: see & clear readers' book requests ----------
+  $("#e-book-requests-btn").addEventListener("click", async () => {
+    openModal("book-requests-modal");
+    await loadBookRequests();
+  });
+
+  async function loadBookRequests() {
+    try {
+      const data = await api("/api/admin/book-requests", {
+        headers: { "x-access-code": state.code },
+      });
+      renderBookRequests(data.requests || []);
+    } catch (err) {
+      $("#book-requests-list").innerHTML = "";
+      const empty = $("#book-requests-empty");
+      empty.hidden = false;
+      empty.textContent = "Erreur : " + err.message;
+    }
+  }
+
+  function renderBookRequests(list) {
+    const container = $("#book-requests-list");
+    const empty = $("#book-requests-empty");
+    container.innerHTML = "";
+    if (!list.length) {
+      empty.hidden = false;
+      empty.textContent = "Aucune demande en attente pour le moment.";
+      return;
+    }
+    empty.hidden = true;
+    list.forEach((r) => {
+      const row = document.createElement("div");
+      row.className = "e-request-row";
+      row.innerHTML = `
+        <div class="e-request-info">
+          <strong>${escapeHtml(r.title)}</strong>${r.author ? " — " + escapeHtml(r.author) : ""}
+          ${r.note ? `<div class="e-request-note">${escapeHtml(r.note)}</div>` : ""}
+          <div class="e-request-meta">Demandé par ${escapeHtml(r.requested_by || "un lecteur")}</div>
+        </div>
+        <button class="e-btn e-btn-ghost" type="button" data-resolve="${r.id}">Marquer comme traité</button>
+      `;
+      container.appendChild(row);
+    });
+    container.querySelectorAll("[data-resolve]").forEach((btn) =>
+      btn.addEventListener("click", async () => {
+        btn.disabled = true;
+        try {
+          await api("/api/admin/book-requests/resolve", {
+            method: "POST",
+            headers: { "content-type": "application/json", "x-access-code": state.code },
+            body: JSON.stringify({ id: btn.dataset.resolve }),
+          });
+          await loadBookRequests();
+        } catch (err) {
+          btn.disabled = false;
+          alert("Erreur : " + err.message);
+        }
+      })
+    );
+  }
 
   // ---------- admin: add book ----------
   $("#e-add-book-btn").addEventListener("click", () => openModal("add-book-modal"));
