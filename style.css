@@ -209,12 +209,15 @@ a { color: inherit; }
 
 .e-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 28px 24px; }
 .e-card {
+  display: block; width: 100%;
   cursor: pointer; text-align: left; background: none; border: none; padding: 0; color: inherit;
   animation: eFadeIn .5s ease both;
   animation-delay: calc(var(--i, 0) * 25ms);
 }
 .e-card-cover {
-  width: 100%; aspect-ratio: 2 / 3;
+  /* fixed-ratio box via the padding-top trick — every cover renders at exactly
+     the same size no matter its original dimensions, so nothing looks offset */
+  width: 100%; height: 0; padding-top: 150%;
   background: linear-gradient(160deg, #21392b, #142219) center/cover;
   border-radius: 3px; border: 1px solid #3a5240; overflow: hidden; position: relative;
   box-shadow: 0 8px 20px rgba(0,0,0,.45);
@@ -232,7 +235,7 @@ a { color: inherit; }
   border-color: #d4af37;
 }
 .e-card:hover .e-card-cover::before, .e-card:hover .e-card-cover::after { opacity: 1; }
-.e-card-cover img { width: 100%; height: 100%; object-fit: cover; }
+.e-card-cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .e-card-title {
   margin-top: 12px; font-size: 15px; color: #ead9b3; line-height: 1.35;
   font-variant: small-caps; letter-spacing: .3px;
@@ -276,8 +279,8 @@ a { color: inherit; }
 }
 #e-oath-btn { margin-top: 4px; padding: 15px 44px; font-size: 14.5px; }
 .e-oath-note {
-  font-family: "EB Garamond", serif; font-style: italic; font-size: 13.5px;
-  color: #7c9a79; margin: 18px auto 0; max-width: 480px; line-height: 1.5;
+  font-family: "EB Garamond", serif; font-style: italic; font-size: 16.5px;
+  color: #7c9a79; margin: 18px auto 0; max-width: 520px; line-height: 1.55;
 }
 
 @media (max-width: 560px) {
@@ -373,6 +376,14 @@ a { color: inherit; }
   background: rgba(200,70,70,.12); border-color: #c85050; color: #ffc7c7; box-shadow: 0 0 14px rgba(200,70,70,.2);
 }
 
+/* Copper accent — sets "Larcin Effectué !" apart from the other header buttons */
+.e-btn-copper {
+  border-color: #8a5a2f; color: #e0b382;
+}
+.e-btn-copper:hover {
+  background: rgba(200,130,60,.12); border-color: #c8863c; color: #f2c99a; box-shadow: 0 0 14px rgba(200,130,60,.2);
+}
+
 .e-confirm-box p { line-height: 1.6; }
 .e-confirm-actions { display: flex; gap: 12px; margin-top: 20px; }
 
@@ -388,28 +399,44 @@ a { color: inherit; }
 .e-request-meta { color: #6f8a72; font-size: 12.5px; margin-top: 6px; font-family: "Cinzel", serif; letter-spacing: .4px; }
 .e-request-row .e-btn { flex-shrink: 0; }
 
-/* "Derniers ajouts" rail — spans the full width, above the sidebar/grid row */
-.e-recent { grid-column: 1 / -1; margin-bottom: 8px; }
+/* "Derniers ajouts" rail — spans the full width, above the sidebar/grid row,
+   framed as its own panel with the title sitting to the left of the row */
+.e-recent {
+  grid-column: 1 / -1; margin-bottom: 8px;
+  display: flex; align-items: center; gap: 26px;
+  border: 1px solid #3a5240; border-radius: 8px;
+  background: linear-gradient(160deg, rgba(24,46,34,.55), rgba(16,32,26,.55));
+  box-shadow: 0 0 0 1px rgba(212,175,55,.08), 0 12px 30px rgba(0,0,0,.3);
+  padding: 22px 26px;
+}
 .e-recent-title {
   font-family: "Cinzel", serif; font-size: 13px; color: #a9c2a6; text-transform: uppercase;
-  letter-spacing: 2px; margin: 0 0 16px;
+  letter-spacing: 2px; margin: 0; flex-shrink: 0;
+  display: flex; align-items: center; align-self: stretch;
+  border-right: 1px solid #3a5240; padding-right: 26px;
 }
-.e-recent-row { display: flex; gap: 18px; overflow-x: auto; padding-bottom: 10px; }
+.e-recent-row { display: flex; gap: 18px; overflow-x: auto; padding: 4px 4px 10px; flex: 1; min-width: 0; }
 .e-recent-card {
   cursor: pointer; text-align: left; background: none; border: none; padding: 0; color: inherit;
   flex: 0 0 120px;
 }
 .e-recent-cover {
-  width: 120px; aspect-ratio: 2 / 3;
+  width: 120px; height: 180px;
   background: linear-gradient(160deg, #21392b, #142219) center/cover;
-  border-radius: 3px; border: 1px solid #3a5240; overflow: hidden;
+  border-radius: 3px; border: 1px solid #3a5240; overflow: hidden; position: relative;
   box-shadow: 0 6px 16px rgba(0,0,0,.4);
   transition: transform .2s ease, border-color .2s ease;
 }
 .e-recent-card:hover .e-recent-cover { transform: translateY(-4px); border-color: #d4af37; }
-.e-recent-cover img { width: 100%; height: 100%; object-fit: cover; }
+.e-recent-cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .e-recent-card-title {
   margin-top: 8px; font-size: 12.5px; color: #cdbf94; line-height: 1.3; font-variant: small-caps;
+  width: 120px;
+}
+
+@media (max-width: 720px) {
+  .e-recent { flex-direction: column; align-items: stretch; }
+  .e-recent-title { border-right: none; border-bottom: 1px solid #3a5240; padding-right: 0; padding-bottom: 14px; }
 }
 
 /* Themed scrollbars, inside the library only */
