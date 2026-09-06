@@ -74,6 +74,14 @@ a { color: inherit; }
   .d-hero h1 { font-size: 30px; }
 }
 
+@media (max-width: 560px) {
+  .d-nav { flex-wrap: wrap; height: auto; padding: 10px 0; row-gap: 8px; }
+  .d-nav nav { flex-wrap: wrap; gap: 10px 16px; font-size: 13px; }
+  .d-feature-grid { grid-template-columns: 1fr; }
+  .d-hero { padding: 40px 0; }
+  .d-hero h1 { font-size: 25px; }
+}
+
 /* ============================================================
    Modals (shared)
    ============================================================ */
@@ -141,7 +149,10 @@ a { color: inherit; }
   box-shadow: 0 2px 24px rgba(0,0,0,.4);
   position: sticky; top: 0; z-index: 10;
 }
-.e-header-inner { display: flex; align-items: center; justify-content: space-between; height: 80px; }
+.e-header-inner {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  min-height: 80px; padding: 12px 0; gap: 12px;
+}
 .e-brand {
   font-family: "Cinzel Decorative", serif; font-size: 21px; color: #e9cd6f;
   display: flex; align-items: center; gap: 12px; letter-spacing: .8px;
@@ -149,7 +160,7 @@ a { color: inherit; }
 .e-brand-glyph {
   color: #e9cd6f; font-size: 20px; display: inline-block; animation: eGlow 3.5s ease-in-out infinite;
 }
-.e-header-actions { display: flex; align-items: center; gap: 16px; font-family: "Cinzel", serif; font-size: 13px; }
+.e-header-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; font-family: "Cinzel", serif; font-size: 13px; }
 .e-welcome {
   color: #a9c2a6; font-family: "EB Garamond", serif; font-style: italic; font-size: 15px;
   padding-right: 16px; border-right: 1px solid #3a5240;
@@ -447,7 +458,7 @@ a { color: inherit; }
   width: 120px;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 860px) {
   .e-recent { flex-direction: column; align-items: stretch; }
   .e-recent-title { border-right: none; border-bottom: 1px solid #3a5240; padding-right: 0; padding-bottom: 14px; }
 }
@@ -459,10 +470,58 @@ a { color: inherit; }
 #app *::-webkit-scrollbar-thumb { background: #3a5240; border-radius: 6px; border: 2px solid #10201a; }
 #app *::-webkit-scrollbar-thumb:hover { background: #4d6b52; }
 
-@media (max-width: 720px) {
-  .e-layout { grid-template-columns: 1fr; }
+@media (max-width: 860px) {
+  #e-library-content.e-layout { grid-template-columns: 1fr; gap: 28px; padding: 28px 20px 56px; }
+  .e-sidebar { padding-bottom: 16px; border-bottom: 1px solid #3a5240; margin-bottom: 4px; }
+  .e-sidebar h3 { text-align: left; margin-bottom: 12px; }
+  .e-genre-list { flex-direction: row; flex-wrap: wrap; gap: 8px; }
+  .e-genre {
+    padding: 7px 14px; border: 1px solid #3a5240; border-radius: 20px; border-left: 1px solid #3a5240;
+  }
+  .e-genre::before { display: none; }
+  .e-genre:hover { padding-left: 14px; }
+  .e-genre.active { border-color: #d4af37; background: rgba(212,175,55,.14); }
   .e-book-modal-grid { grid-template-columns: 1fr; }
+  .e-book-modal-grid img { max-width: 260px; margin: 0 auto; }
   .e-welcome { display: none; }
+}
+
+/* ============================================================
+   Phone tightening — tighter spacing, smaller type, 2-column grid
+   ============================================================ */
+@media (max-width: 480px) {
+  #app .e-wrap { padding: 0 16px; }
+  #e-library-content.e-layout { padding: 22px 16px 48px; gap: 22px; }
+
+  .e-header-inner { min-height: auto; }
+  .e-brand { font-size: 16px; gap: 8px; }
+  .e-btn { padding: 9px 13px; font-size: 11px; }
+  .e-header-actions { gap: 8px 10px; justify-content: center; width: 100%; }
+
+  .e-oath { padding: 40px 16px; }
+  .e-oath-note { font-size: 14.5px; }
+
+  .e-recent { padding: 16px 16px; gap: 16px; }
+  .e-recent-card { flex: 0 0 96px; }
+  .e-recent-cover { width: 96px; height: 144px; }
+  .e-recent-card-title { width: 96px; }
+
+  .e-toolbar { margin-bottom: 20px; }
+
+  .e-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 20px 14px; }
+  .e-card-title { font-size: 13.5px; }
+  .e-card-author { font-size: 12px; }
+
+  .modal-overlay { padding: 12px; }
+  .modal-box { padding: 22px; max-height: 92vh; }
+  .e-book-modal { padding: 24px 18px; }
+  .e-book-modal-info h2 { font-size: 21px; }
+
+  .e-confirm-actions, .e-book-modal-actions { flex-direction: column; align-items: stretch; }
+  .e-confirm-actions .e-btn, .e-book-modal-actions .e-btn, .e-book-modal-actions a { text-align: center; }
+
+  .e-request-row { flex-direction: column; align-items: stretch; }
+  .e-request-row .e-btn { width: 100%; text-align: center; }
 }
 
 /* Unlock modal stays intentionally in the plain "customer area" style —
